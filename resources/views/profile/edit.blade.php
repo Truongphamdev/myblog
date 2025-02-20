@@ -1,27 +1,41 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg p-4 rounded-lg">
+                    <div class="text-center">
+                        <h2 class="font-weight-bold text-primary">Hồ Sơ Cá Nhân</h2>
+                        <p class="text-muted">Cập nhật thông tin cá nhân của bạn</p>
+                    </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+                    @if(session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    @endif
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+                    @php
+                        $user = Auth::user();
+                    @endphp
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
+                    <div class="text-center">
+                        <img src="{{ $user->avatar ? asset($user->avatar->path) : asset('avatar/avatar.png') }}"
+                            alt="{{ $user->name }}'s Avatar"
+                            class="rounded-circle shadow" width="120" height="120">
+                        
+                        <h4 class="mt-3">{{ $user->name }}</h4>
+                        <p class="text-muted">{{ $user->email }}</p>
+                    </div>
+
+                    <form action="{{ route('avatar') }}" method="POST" enctype="multipart/form-data" class="mt-3">
+                        @csrf
+                        @method('PUT')
+                        <div class="mb-3">
+                            <label for="avatar" class="form-label fw-bold">Chọn ảnh đại diện:</label>
+                            <input type="file" name="avatar" id="avatar" class="form-control">
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Cập Nhật Ảnh</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

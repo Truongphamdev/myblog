@@ -2,6 +2,8 @@
 
 namespace App\Models;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -36,5 +38,8 @@ class Post extends Model
     }
     public function photos(){
         return $this->morphMany(Photo::class,"photoable");
+    }
+    public function isLikedByUser(){
+        return $this->likes()->where('user_id',Auth::id())->exists();
     }
 }

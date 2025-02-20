@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
+use App\Models\Like;
 use App\Models\Photo;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -27,7 +30,7 @@ class PostController extends Controller
     // lưu trữ bài viết
     public function storepost(Request $request){
         $request->validate([
-            'title'=>'required',
+            'title'=>'required|max:255',
             'content'=>'required',
             'tags'=>'required|array',
             'tags.*'=>'exists:tags,id',
@@ -69,10 +72,11 @@ class PostController extends Controller
     public function post_detail($slug){
         $post = Post::where('slug',$slug)->with('photos')->firstOrFail();
         $relatePost = Post::where('id','!=',$post->id)->latest()->take(3)->get();
+        $comments = Comment::where('post_id',$post->id)->latest()->get();
         if(!$post){
             return redirect()->route('dashboard')->with('error', 'Bài viết không tồn tại.');
         }
-        return view('post.post_detail',compact('post','relatePost'));
+        return view('post.post_detail',compact('post','relatePost','comments'));
     }
     // update post
     public function edit_post($slug){
@@ -146,5 +150,81 @@ class PostController extends Controller
         $post->delete();
         return redirect()->route('dashboard');
     }
-    
+
+    // nút like
+    public function like($id){
+        $existlike = Like::where('user_id',Auth::id())->where('post_id',$id)->first();
+
+        if($existlike){
+            $existlike->delete();
+            return back()->with('success','Đã Bỏ Like Bài Viết');
+        }
+
+        Like::create([
+            'user_id'=>Auth::id(),
+            'post_id'=>$id
+        ]);
+        return back()->with('success','Đã Like Bài Viết');
+        
+    }
+    // avatar
+    public function avatar(Request $request){
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+        ]);
+        $user = Auth::user();
+        $existavatar = $user->avatar;
+        if ($existavatar) {
+            $fileex = public_path($existavatar->path);
+            if (file_exists($fileex)) { 
+                unlink($fileex);
+            }
+            $existavatar->delete();
+        }
+        if($request->hasFile('avatar')){
+            $file = $request->file('avatar');
+            $namefile = uniqid().'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('avatar'),$namefile);
+
+            $path = 'avatar/'.$namefile;
+            $user->avatar()->create(['path'=>$path]);
+        }
+
+
+
+
+        return redirect()->back()->with('success','ảnh đại diện đã được cập nhật');
+    }
+    // comment
+    public function store_comment(Request $request,$id){
+        $request->validate([
+             'content' => 'required|min:5'
+        ]);
+        $content = $request->content;
+        Comment::create([
+            'user_id'=>Auth::id(),
+            'post_id'=>$id,
+            'content'=>$content
+        ]);
+        return redirect()->back()->with('success', 'Bình luận đã được gửi!');
+    }
+    // search
+    public function search(Request $request){
+        $search = $request->search;
+        $result = Post::whereRaw('LOWER(title) LIKE ?', ["%".strtolower($search)."%"])->orwhereRaw('LOWER(content) LIKE ?', ["%".strtolower($search)."%"])->get();
+        return view('search.search',compact('result'));
+
+    }
+    // profile
+    public function show($id=null){
+        if(!$id){
+            $user=Auth::user();
+        }
+        else {
+            $user = User::findOrFail($id);
+        }
+        $postCount = $user->posts()->count(); 
+        $likeCount = $user->posts()->withCount('likes')->get()->sum('likes_count');
+        return view('profile.profile',compact('user','postCount','likeCount'));
+    }
 }

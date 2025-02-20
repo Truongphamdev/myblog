@@ -6,7 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -16,6 +16,7 @@ class User extends Authenticatable
      * The attributes that are mass assignable.
      *
      * @var list<string>
+     *  @property-read \App\Models\Photo|null $avatar
      */
     protected $fillable = [
         'name',
@@ -37,8 +38,9 @@ class User extends Authenticatable
     public function likes(){
         return $this->hasMany(Like::class);
     }
-    public function avatar(){
-        return $this->morphOne(Photo::class,'photoable');
+    public function avatar(): MorphOne
+    {
+        return $this->morphOne(Photo::class, 'photoable')->latestOfMany();
     }
 
     

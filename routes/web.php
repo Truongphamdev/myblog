@@ -33,6 +33,17 @@ Route::middleware('auth')->group(function(){
         Route::put('updatepost/{slug}',[PostController::class,'update_post'])->name('update_post');
         //delete
         Route::delete('deletepost/{slug}',[PostController::class,'destroy_post'])->name('destroy_post');
+        // like
+        Route::post('like/{id}',[PostController::class,'like'])->name('like');
+        // avatar
+        Route::put('user/avatar',[PostController::class,'avatar'])->name('avatar');
+        // comment
+        Route::post('comment/{id}',[PostController::class,'store_comment'])->name('store_comment');
+        // search
+        Route::get('search',[PostController::class,'search'])->name('search');
+        // profile
+        Route::get('/profile/{id}', [PostController::class, 'show'])->name('profile_detail');
+
     });
     Route::post('/reading-list/add_later/{postId}',[ReadLaterController::class,'add_later'])->name('add_later');
     Route::delete('/reading-list/remove_later/{postId}',[ReadLaterController::class,'remove_later'])->name('remove_later');

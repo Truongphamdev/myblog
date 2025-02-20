@@ -31,21 +31,24 @@
 
             <!-- Page Content -->
             <main>
-                <div class="py-12 mb-3 card" style="background-color: rgb(250, 78, 40)">
+                <div class="py-12 mb-3 card" style="background-color: rgb(255, 90, 30)">
                     <div class="d-flex justify-content-between">
                         <div class="ms-20 me-20">
-                            <a href="{{Route('dashboard')}}"><button class="btn  {{ request()->routeIs('dashboard') ? 'btn-info' : 'btn-success' }}">Trang Chủ</button></a>
+                            <a href="{{Route('dashboard')}}"><button class="btn  {{ request()->routeIs('dashboard') ? 'btn-light' : 'btn-info' }}">Trang Chủ</button></a>
                         </div>
                         <div style="width:70%" class="d-flex justify-content-around">
                             <div>
-                                <a   href="{{Route('addpost')}}"><button class="btn {{ request()->routeIs('addpost') ? 'btn-info' : 'btn-success' }}">Thêm Bài Viết</button></a>
+                                <a   href="{{Route('addpost')}}"><button class="btn {{ request()->routeIs('addpost') ? 'btn-light' : 'btn-info' }}">Thêm Bài Viết</button></a>
                             </div>
                             <div>
-                                <a href="{{Route('all_post')}}"><button   class="btn  {{request()->routeIs('all_post') ? 'btn-info' : 'btn-success'}}">Danh Sách Bài Viết</button></a>
+                                <a href="{{Route('all_post')}}"><button   class="btn  {{request()->routeIs('all_post') ? 'btn-light' : 'btn-info'}}">Danh Sách Bài Viết</button></a>
                             </div>
                             <div>
-                                <form action="">
-                                    <input id="search" class="" style="border-radius:10px" placeholder="tìm kiếm" type="text" name="search">
+                                <a href="{{Route('read_later_list')}}"><button   class="btn  {{request()->routeIs('read_later_list') ? 'btn-light' : 'btn-info'}}">Danh Sách Đọc Sau</button></a>
+                            </div>
+                            <div>
+                                <form action="{{Route('search')}}" method="GET">
+                                    <input id="search" class="" style="border-radius:10px" placeholder="tìm kiếm" type="text" value="{{request('search')}}" name="search">
                                     <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                                 </form>
                             </div>

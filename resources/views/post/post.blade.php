@@ -16,11 +16,10 @@
                                 }
                             </style>
                         <h5 class=" card-title">
-                            <a href="" class="title text-decoration-none fs-4 text-dark r">
+                            <a href="{{Route('post_detail',$post->slug)}}" class="title text-decoration-none fs-4 text-dark r">
                                {{$post->title}}
                             </a>
                         </h5>
-
                         <!-- Mô tả ngắn -->
                         <p class="card-text text-muted">
                             {{ Str::limit($post->content, 100) }}
@@ -29,7 +28,12 @@
                                                    
                     </div>
                     <div>
-                        <a href="" style="text-decoration:underline;color:red;font-style:italic">{{$post->user->name}}</a>
+                        <div class="d-flex align-items-center">
+                            <img src="{{ $post->user->avatar ? asset($post->user->avatar->path) : asset('avatar/avatar.png') }}" 
+                            alt="{{ $post->user->name }}'s Avatar" 
+                            class="rounded-circle" style="width:40px;height:35px">
+                            <a href="{{Route('profile_detail',$post->user->id)}}" style="text-decoration:underline;color:red;font-style:italic">{{$post->user->name}}</a>
+                        </div>
                         <div>
 
                             <span class="ms-5" style="font-size: 12px">{{$post->created_at}}</span>

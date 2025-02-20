@@ -28,7 +28,7 @@
                     </div>
     
                     <div class="card-footer  bg-white text-end">
-                        <a href="" class="btn btn-danger">Đọc tiếp</a>
+                        <a href="{{Route('post_detail',$post->slug)}}" class="btn btn-danger">Đọc tiếp</a>
                     </div>
                 </div>
             </div>
