@@ -40,6 +40,11 @@
                             <div>
                                 <a   href="{{Route('addpost')}}"><button class="btn {{ request()->routeIs('addpost') ? 'btn-light' : 'btn-info' }}">Thêm Bài Viết</button></a>
                             </div>
+                            @if (Auth::check() && Auth::user()->role==='admin')
+                            <div>
+                                <a href="{{Route('admin')}}"><button   class="btn  {{request()->routeIs('admin') ? 'btn-light' : 'btn-info'}}">Trang Quản Lý</button></a>
+                            </div>
+                            @endif
                             <div>
                                 <a href="{{Route('all_post')}}"><button   class="btn  {{request()->routeIs('all_post') ? 'btn-light' : 'btn-info'}}">Danh Sách Bài Viết</button></a>
                             </div>

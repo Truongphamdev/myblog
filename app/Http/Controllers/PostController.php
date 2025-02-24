@@ -19,7 +19,7 @@ class PostController extends Controller
 {
     // lấy 3 bài viết gần nhất
     public function index(){
-        $posts = Post::latest()->take(4)->with('photos')->get();
+        $posts = Post::where('status','approved')->latest()->take(4)->with('photos')->get();
         return view('dashboard',compact('posts'));
     }
     // thêm bài viết
@@ -34,7 +34,9 @@ class PostController extends Controller
             'content'=>'required',
             'tags'=>'required|array',
             'tags.*'=>'exists:tags,id',
-            'photos.*'=>'nullable|image|mimes:jpeg,pdf,png,jpg,gif|max:2048'
+            'images' => 'required|array', // Bắt buộc phải có ít nhất một ảnh
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048' // Kiểm tra từng ảnh
+
         ]);
         $user_id = Auth::id();
 
@@ -65,7 +67,7 @@ class PostController extends Controller
     }
     // lấy danh sác bài viết
     public function all_post(){
-        $posts = Post::with(['photos','user'])->latest()->paginate(3);
+        $posts = Post::where('status','approved')->with(['photos','user'])->latest()->paginate(6);
         return view('post.all_post',compact('posts'));
     }
     // bài viết chi tiết

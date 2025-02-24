@@ -10,11 +10,17 @@
                         <div class="mb-3">
                             <label class="form-label fw-bold">📌 Tiêu đề</label>
                             <input type="text" name="title" class="form-control" placeholder="Nhập tiêu đề..." required>
+                            @error('title')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">📝 Nội dung</label>
                             <textarea name="content" class="form-control" rows="5" placeholder="Nhập nội dung..." required></textarea>
+                            @error('content')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                         </div>
 
                         <div class="mb-3">
@@ -24,13 +30,20 @@
                                     <option value="{{ $tag->id }}">{{ $tag->name }}</option>
                                 @endforeach
                             </select>
-                            
+                            @error('tags')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">🖼 Ảnh bài viết (Chọn nhiều ảnh)</label>
-                            <input type="file" name="images[]" multiple class="form-control">
-                            
+                            <input type="file" name="images[]" multiple class="form-control @error('images') is-invalid @enderror">
+                            @error('images')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            @error('images.*')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 mt-3">🚀 Đăng bài</button>

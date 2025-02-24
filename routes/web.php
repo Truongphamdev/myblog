@@ -14,8 +14,11 @@ Route::get('/', function () {
 Route::get('/dashboard', [PostController::class,'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::middleware(['auth', 'admin'])->group(function () {
-        Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::middleware([ 'admin'])->group(function () {
+        Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+        // duyệt xóa
+        Route::get('post/{id}/approve',[AdminController::class,'approve'])->name('approve');
+        Route::get('post/{id}/reject',[AdminController::class,'reject'])->name('reject');
     });
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
