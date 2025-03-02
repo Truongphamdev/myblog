@@ -16,9 +16,13 @@ Route::get('/dashboard', [PostController::class,'index'])->middleware(['auth', '
 Route::middleware('auth')->group(function () {
     Route::middleware([ 'admin'])->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin');
+        Route::get('/admin_user', [AdminController::class, 'manageUser'])->name('admin_user');
         // duyệt xóa
         Route::get('post/{id}/approve',[AdminController::class,'approve'])->name('approve');
         Route::get('post/{id}/reject',[AdminController::class,'reject'])->name('reject');
+        //remove user
+        Route::delete('/remove_user/{id}', [AdminController::class, 'remove_user'])->name('remove_user');
+
     });
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,6 +50,7 @@ Route::middleware('auth')->group(function(){
         Route::get('search',[PostController::class,'search'])->name('search');
         // profile
         Route::get('/profile/{id}', [PostController::class, 'show'])->name('profile_detail');
+        
 
     });
     Route::post('/reading-list/add_later/{postId}',[ReadLaterController::class,'add_later'])->name('add_later');

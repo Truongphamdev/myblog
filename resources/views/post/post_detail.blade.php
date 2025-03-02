@@ -8,7 +8,7 @@
                 <div class="card shadow-lg rounded-4 border-0">
                     @if ($post->photos->isNotEmpty())
                     @foreach($post->photos as $photo)
-                        <img src="{{ asset($photo->path) }}" class="card-img-top rounded-top-4 mb-4" alt="{{ $post->title }}" style="object-fit: cover; height: 800px;">
+                        <img src="{{ asset($photo->path) }}" class="card-img-top rounded-top-4 mb-4" alt="{{ $post->title }}" style="object-fit: cover; height: 500px;">
                     @endforeach
                         @endif
 

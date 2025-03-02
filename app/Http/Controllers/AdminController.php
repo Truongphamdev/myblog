@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -26,5 +27,19 @@ class AdminController extends Controller
             return back()->with('success', 'Bài viết đã bị xóa!');
         }
         return back()->with('error', 'Chỉ có thể xóa bài viết bị từ chối.');
+    }
+    // user
+    public function manageUser(){
+        $users = User::latest()->get();
+        return view('admin.user',compact('users'));
+    }
+    // remove user
+    public function remove_user($id){
+        $user = User::findOrFail($id);
+        if($user){
+            $user->delete();
+            return back()->with('success', 'Người dùng đã bị xóa!');
+        }
+        return back()->with('error', 'không thể xóa');
     }
 }

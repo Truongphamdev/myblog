@@ -30,6 +30,33 @@
             @endisset --}}
 
             <!-- Page Content -->
+            {{-- <div id="loading">
+                <img src="{{ asset('image/giphy.gif') }}" alt="Loading..." />
+            </div>
+            <style>
+
+                #loading {
+                    position: fixed;
+                    width: 100%;
+                    height: 100%;
+                    background:transparent;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    top: 0;
+                    left: 0;
+                    z-index: 9999;
+                }
+                </style>
+                <script>
+                    window.onload = function() {
+                        setTimeout(function() {
+                            document.getElementById("loading").style.display = "none";
+                        }, 1000); // Ẩn sau 1 giây
+                    };
+                </script> --}}
+                
+            
             <main>
                 <div class="py-12 mb-3 card" style="background-color: rgb(255, 90, 30)">
                     <div class="d-flex justify-content-between">
@@ -42,7 +69,10 @@
                             </div>
                             @if (Auth::check() && Auth::user()->role==='admin')
                             <div>
-                                <a href="{{Route('admin')}}"><button   class="btn  {{request()->routeIs('admin') ? 'btn-light' : 'btn-info'}}">Trang Quản Lý</button></a>
+                                <a href="{{Route('admin_user')}}"><button   class="btn  {{request()->routeIs('admin_user') ? 'btn-light' : 'btn-info'}}"> Quản Lý User</button></a>
+                            </div>
+                            <div>
+                                <a href="{{Route('admin')}}"><button   class="btn  {{request()->routeIs('admin') ? 'btn-light' : 'btn-info'}}"> Quản Lý Post</button></a>
                             </div>
                             @endif
                             <div>
