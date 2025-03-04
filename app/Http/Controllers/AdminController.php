@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -41,5 +42,28 @@ class AdminController extends Controller
             return back()->with('success', 'Người dùng đã bị xóa!');
         }
         return back()->with('error', 'không thể xóa');
+    }
+    // comment
+    public function manage_comment(){
+        $comments = Comment::latest()->get();
+        return view('admin.comment',compact('comments'));
+    }
+
+    public function approve_comment($id){
+        $comment = Comment::findOrFail($id);
+        $comment->status ="approved";
+        $comment->save();
+        return back()->with('success', 'Bình luận đã được duyệt!');
+    }
+
+    public function reject_comment($id){
+        $comment = Comment::findOrFail($id);
+        $comment->status = 'rejected';
+        $comment->save();
+        if($comment->status == 'rejected'){
+            $comment->delete();
+            return back()->with('success', 'Bình luận đã bị xóa!');
+        }
+        return back()->with('error', 'Chỉ có thể xóa Bình luận bị từ chối.');
     }
 }

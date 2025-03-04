@@ -33,7 +33,7 @@
                         {{$post->user->name}}
                     </a>
                 </div>
-                <span class="text-primary " style="font-size: 12px">{{$post->created_at}}</span>
+                <span class="text-primary " style="font-size: 12px">{{$post->created_at->format('d/m/Y')}}</span>
                     
             </div>
             </div>

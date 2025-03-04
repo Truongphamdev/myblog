@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>MyBlog</title>
-        <link rel="icon" type="image/jpeg" href="{{ asset('anhtn1.jpg') }}">
+        <link rel="icon"  type="image/jpeg" href="{{ asset('image/goku2.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -67,20 +67,38 @@
                             <div>
                                 <a   href="{{Route('addpost')}}"><button class="btn {{ request()->routeIs('addpost') ? 'btn-light' : 'btn-info' }}">Thêm Bài Viết</button></a>
                             </div>
-                            @if (Auth::check() && Auth::user()->role==='admin')
-                            <div>
-                                <a href="{{Route('admin_user')}}"><button   class="btn  {{request()->routeIs('admin_user') ? 'btn-light' : 'btn-info'}}"> Quản Lý User</button></a>
-                            </div>
-                            <div>
-                                <a href="{{Route('admin')}}"><button   class="btn  {{request()->routeIs('admin') ? 'btn-light' : 'btn-info'}}"> Quản Lý Post</button></a>
-                            </div>
-                            @endif
+                            
                             <div>
                                 <a href="{{Route('all_post')}}"><button   class="btn  {{request()->routeIs('all_post') ? 'btn-light' : 'btn-info'}}">Danh Sách Bài Viết</button></a>
                             </div>
                             <div>
                                 <a href="{{Route('read_later_list')}}"><button   class="btn  {{request()->routeIs('read_later_list') ? 'btn-light' : 'btn-info'}}">Danh Sách Đọc Sau</button></a>
                             </div>
+                            @if (Auth::check() && Auth::user()->role === 'admin')
+                            <div class="dropdown">
+                                <button class="btn btn-info dropdown-toggle" type="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Quản Lý Admin
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                    <li>
+                                        <a class="dropdown-item {{ request()->routeIs('admin') ? 'active' : '' }}" href="{{ route('admin') }}">
+                                            Quản Lý Post
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item {{ request()->routeIs('admin_user') ? 'active' : '' }}" href="{{ route('admin_user') }}">
+                                            Quản Lý User
+                                        </a>
+                                    </li>
+                                    <!-- Nếu bạn muốn thay cái thứ 3, thay link và tên tại đây -->
+                                    <li>
+                                        <a class="dropdown-item {{ request()->routeIs('manage_comment') ? 'active' : '' }}" href="{{ route('manage_comment') }}">
+                                            Quản Lý Comment
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        @endif
                             <div>
                                 <form action="{{Route('search')}}" method="GET">
                                     <input id="search" class="" style="border-radius:10px" placeholder="tìm kiếm" type="text" value="{{request('search')}}" name="search">

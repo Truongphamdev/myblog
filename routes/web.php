@@ -22,14 +22,18 @@ Route::middleware('auth')->group(function () {
         Route::get('post/{id}/reject',[AdminController::class,'reject'])->name('reject');
         //remove user
         Route::delete('/remove_user/{id}', [AdminController::class, 'remove_user'])->name('remove_user');
+        // comment
+        Route::get('admin_comment',[AdminController::class,'manage_comment'])->name('manage_comment');
+        Route::get('post/{id}/approve_comment',[AdminController::class,'approve_comment'])->name('approve_comment');
+        Route::get('post/{id}/reject_comment',[AdminController::class,'reject_comment'])->name('reject_comment');
 
     });
     
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->group(function(){ 
     Route::prefix('/post/')->group(function(){
         Route::get('addpost',[PostController::class,'addpost'])->name('addpost');
         Route::post('storepost',[PostController::class,'storepost'])->name('storepost');
@@ -46,6 +50,7 @@ Route::middleware('auth')->group(function(){
         Route::put('user/avatar',[PostController::class,'avatar'])->name('avatar');
         // comment
         Route::post('comment/{id}',[PostController::class,'store_comment'])->name('store_comment');
+        Route::delete('destroy_comment/{id}',[PostController::class,'destroy_comment'])->name('destroy_comment');
         // search
         Route::get('search',[PostController::class,'search'])->name('search');
         // profile

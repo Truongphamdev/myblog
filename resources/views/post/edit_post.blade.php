@@ -34,7 +34,7 @@
                             <input type="file" name="images[]" multiple class="form-control">
                             @foreach($post->photos as $photo)
                             <img src="{{ asset($photo->path) }}" alt="Ảnh cũ" class="img-thumbnail me-2" width="100">
-                                <input type="hidden" name="old_photo[]" value="{{$photo->path}}">
+                               
                             @endforeach
                         </div>
 

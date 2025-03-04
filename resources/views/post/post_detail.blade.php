@@ -94,7 +94,17 @@
                             <a href="{{Route('profile_detail',$comment->user->id)}}"><strong>{{ $comment->user->name }}</strong></a>
                             <span class="ms-auto text-muted small">{{ $comment->created_at->diffForHumans() }}</span>
                         </div>
-                        <p class="mb-0">{{ $comment->content }}</p>
+                        <div class="d-flex justify-between">
+                            <p class="mb-0">{{ $comment->content }}</p>
+                            @if (Auth::check() && (Auth::user()->id === $comment->user_id || Auth::user()->role === 'admin'))
+                            
+                            <form action="{{Route('destroy_comment',$comment->id)}}" method="post">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                            </form>
+                            @endif
+                        </div>
                     </li>
                 @endforeach
             </ul>

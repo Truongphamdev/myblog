@@ -19,7 +19,7 @@ class PostController extends Controller
 {
     // lấy 3 bài viết gần nhất
     public function index(){
-        $posts = Post::where('status','approved')->latest()->take(4)->with('photos')->get();
+        $posts = Post::where('status','approved')->latest()->take(5)->with('photos')->get();
         return view('dashboard',compact('posts'));
     }
     // thêm bài viết
@@ -74,7 +74,7 @@ class PostController extends Controller
     public function post_detail($slug){
         $post = Post::where('slug',$slug)->with('photos')->firstOrFail();
         $relatePost = Post::where('id','!=',$post->id)->latest()->take(3)->get();
-        $comments = Comment::where('post_id',$post->id)->latest()->get();
+        $comments = Comment::where('post_id',$post->id)->where('status','approved')->latest()->get();
         if(!$post){
             return redirect()->route('dashboard')->with('error', 'Bài viết không tồn tại.');
         }
@@ -118,18 +118,7 @@ class PostController extends Controller
                 $post->photos()->create(['path' =>'image/'.$image_name]);
             }
         }
-    
-        // Giữ lại ảnh cũ nếu không có ảnh mới
-        if ($request->old_photo) {
-            foreach ($post->photos as $photo) {
-                if (!in_array($photo->path, $request->old_photo)) {
-                    if (file_exists(public_path($photo->path))) {
-                        unlink(public_path($photo->path));
-                    }
-                    $photo->delete();
-                }
-            }
-        }
+
     
         $post->save();
         
@@ -209,6 +198,15 @@ class PostController extends Controller
             'content'=>$content
         ]);
         return redirect()->back()->with('success', 'Bình luận đã được gửi!');
+    }
+    public function destroy_comment($id){
+        $comment = Comment::findOrFail($id);
+        if($comment){
+            $comment->delete();
+            return redirect()->back()->with('success', 'Đã xóa thành công');
+        }
+        return redirect()->back()->with('error', 'Đã Xóa thất bại');
+
     }
     // search
     public function search(Request $request){
